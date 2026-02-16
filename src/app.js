@@ -26,6 +26,8 @@ app.get('/',(req, res) => {
     });
 });
 
-//aqui mas adelante iran las rutas reales 
+//RUTAS
+app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/', (req, res) => res.send('API Funcionando'));
 
 module.exports = app;
