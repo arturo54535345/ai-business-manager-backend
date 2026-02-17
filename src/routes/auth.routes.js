@@ -2,13 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { register, login } = require('../controllers/auth.controller');
 
-// --- RUTAS PÚBLICAS (Cualquiera puede entrar) ---
+// ==========================================
+// RUTAS DE AUTENTICACIÓN
+// ==========================================
+
+// 🔓 RUTAS PÚBLICAS (Cualquiera puede acceder)
 router.post('/register', register);
 router.post('/login', login);
 
-// --- FUTURAS RUTAS DE AUTH (Aquí irán más adelante) ---
-// router.post('/forgot-password', forgotPassword);
-// router.post('/reset-password/:token', resetPassword);
-// router.get('/me', authMiddleware, getMe); // Para ver tus propios datos
+// 🔮 FUTURO: Aquí pondremos la ruta para "Ver mi perfil" (/me)
+// router.get('/me', require('../middlewares/auth.middleware'), getMe);
 
 module.exports = router;

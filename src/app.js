@@ -13,7 +13,7 @@ const app = express();
 // ==========================================
 app.use(helmet()); // Protege las cabeceras HTTP
 
-// Rate Limiting: Bloquea si hacen más de 100 peticiones en 10 min
+// Rate Limiting: Bloquea si hacen más de 100 peticiones en 10 min desde la misma IP
 const limiter = rateLimit({
     windowMs: 10 * 60 * 1000, 
     max: 100, 
@@ -46,11 +46,16 @@ app.get('/', (req, res) => {
 // ==========================================
 // 4. RUTAS DE LA API (El corazón de la App)
 // ==========================================
+// Auth: Login y Registro
 app.use('/api/auth', require('./routes/auth.routes'));
 
-// 👇 AQUÍ IRÁN TUS PRÓXIMAS RUTAS (Descomenta cuando creemos los archivos) 👇
-// app.use('/api/clients', require('./routes/client.routes'));
-// app.use('/api/tasks', require('./routes/task.routes'));
+// Clientes: CRM (Protegido) ✅ ACTIVADO
+app.use('/api/clients', require('./routes/client.routes'));
+
+// Tareas: ERP y Gestión (Protegido) ✅ ACTIVADO
+app.use('/api/tasks', require('./routes/task.routes'));
+
+// 👇 PRÓXIMAS RUTAS (Aún no creadas, se quedan comentadas) 👇
 // app.use('/api/finance', require('./routes/finance.routes'));
 // app.use('/api/ai', require('./routes/ai.routes'));
 
