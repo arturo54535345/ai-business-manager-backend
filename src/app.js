@@ -55,6 +55,12 @@ app.use('/api/clients', require('./routes/client.routes'));
 // Tareas: ERP y Gestión (Protegido) ✅ ACTIVADO
 app.use('/api/tasks', require('./routes/task.routes'));
 
+// Finanzas: Análisis y Reportes (Protegido) ✅ ACTIVADO
+app.use('/api/finance', require('./routes/finance.routes'));
+
+// IA: Chat con la IA (Protegido) ✅ ACTIVADO
+app.use('/api/ai', require('./routes/ai.routes'));
+
 // 👇 PRÓXIMAS RUTAS (Aún no creadas, se quedan comentadas) 👇
 // app.use('/api/finance', require('./routes/finance.routes'));
 // app.use('/api/ai', require('./routes/ai.routes'));
