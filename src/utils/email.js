@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 const sendEmail = async (options) => {
     //creo el transporter con la configuracion de Gmail
-  const transporter = nademailer.createTransport({
+  const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
       user: process.env.EMAIL_USER,
@@ -12,7 +12,7 @@ const sendEmail = async (options) => {
   //defino las opciones del email
   const mailOptions = {
     from: `"AI Business Manager" <${process.env.EMAIL_USER}>`,
-    to: optiones.email,
+    to: options.email,
     subject: optios.subject,
     html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
