@@ -61,6 +61,10 @@ app.use('/api/finance', require('./routes/finance.routes'));
 // IA: Chat con la IA (Protegido) ✅ ACTIVADO
 app.use('/api/ai', require('./routes/ai.routes'));
 
+// Dashboard: Estadísticas de la App (Protegido) ✅ ACTIVADO
+app.use('/api/dashboard', require('./routes/dashboard.routes'));
+
+
 // 👇 PRÓXIMAS RUTAS (Aún no creadas, se quedan comentadas) 👇
 // app.use('/api/finance', require('./routes/finance.routes'));
 // app.use('/api/ai', require('./routes/ai.routes'));
