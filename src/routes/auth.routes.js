@@ -1,16 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const { register, login } = require('../controllers/auth.controller');
+const { 
+    register, 
+    login, 
+    getMe, 
+    updateDetails, 
+    forgotPassword, 
+    resetPassword 
+} = require('../controllers/auth.controller');
+const auth = require('../middlewares/auth.middleware');
 
 // ==========================================
-// RUTAS DE AUTENTICACIÓN
+// 🔓 RUTAS PÚBLICAS (Sin token)
 // ==========================================
-
-// 🔓 RUTAS PÚBLICAS (Cualquiera puede acceder)
 router.post('/register', register);
 router.post('/login', login);
+router.post('/forgot-password', forgotPassword); // Pide el email
+router.put('/reset-password/:resettoken', resetPassword); // Usa el código del email
 
-// 🔮 FUTURO: Aquí pondremos la ruta para "Ver mi perfil" (/me)
-// router.get('/me', require('../middlewares/auth.middleware'), getMe);
+// ==========================================
+// 🔒 RUTAS PRIVADAS (Requieren estar logueado)
+// ==========================================
+// Usamos el middleware 'auth' solo para estas dos
+router.get('/me', auth, getMe); 
+router.put('/updatedetails', auth, updateDetails);
 
 module.exports = router;
