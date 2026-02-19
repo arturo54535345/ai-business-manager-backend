@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const FinanceSchema = new mongoose.Schema({
     type:{
-        type: Strign,
+        type: String,
         required: true,
         enum: ['ingreso', 'gasto']
     },

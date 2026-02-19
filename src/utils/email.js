@@ -13,7 +13,7 @@ const sendEmail = async (options) => {
   const mailOptions = {
     from: `"AI Business Manager" <${process.env.EMAIL_USER}>`,
     to: options.email,
-    subject: optios.subject,
+    subject: options.subject,
     html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
                 <div style="background-color: #2563eb; padding: 20px; text-align: center;">

@@ -21,7 +21,7 @@ exports.getClientById = async(req, res) => {
         }
         //verifico que el cliente pertenezca al usuario logueado
         if(client.owner.toString() !== req.user.id) {
-            return res.stratus(401).json({message: 'No estas autorizado...'});
+            return res.status(401).json({message: 'No estas autorizado...'});
         }
 
         res.json(client);

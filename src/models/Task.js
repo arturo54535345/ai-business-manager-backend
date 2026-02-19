@@ -4,19 +4,19 @@ const TaskSchema = new mongoose.Schema({
     title:{
         type: String,
         required: [true, "El titulo de la tarea es obligatorio"],
-        tirm: true,
+        trim: true,
     },
     description: {type: String},
     specefications: {type: String},
     
     status: {
         type: String,
-        enumn: ["Pending", "In Progress", "Completed"],
+        enum: ["pending", "in progress", "completed"],
         default: "Pending"
     },
     priority: {
         type: String,
-        enum: ["Low", "Medium", "High"],
+        enum: ["low", "medium", "high"],
         default: "Medium"
     },
     category: {
@@ -28,7 +28,7 @@ const TaskSchema = new mongoose.Schema({
     budget: {type: Number, default: 0}, //lo que se cobrara por esta tarea
     cost: {type: Number, default: 0}, //lo que se ha gastado en esta tarea 
 
-    duaDate: {type: Date}, //fecha limite para completar la tarea
+    dueDate: {type: Date}, //fecha limite para completar la tarea
     
     //relacion con el cliente
     client: {
