@@ -2,25 +2,41 @@ const Task = require("../models/Task");
 
 //obtener tareas del usuario
 exports.getTasks = async (req, res) => {
-  try {
-    const { status, priority, clientId } = req.query;
+  try{
+    const {status, priority, clientId} = req.query;
 
-    //construyo un filtro
-    const filter = { owner: req.user.id };
+    //construyo el filtro
+    const filter = {owner: req.user.id};
+    if(status) filter.status = status;
+    if(priority) filter.priority = priority;
+    if(clientId) filter.client = clientId;
 
-    if (status) filter.status = status;
-    if (priority) filter.priority = priority;
-    if (clientId) filter.client = clientId;
+    //configuro la paginacion
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip = (page - 1) * limit;
 
-    //busco las tareas del usuario con el filtro
+    //busco las tareas con skip y limit 
     const tasks = await Task.find(filter)
-      .populate("client", "name companyName")
-      .sort({ dueDate: 1 }); //ordeno por fecha de vencimiento
+    .populate("client", "name companyName")
+    .sort({dueDate: 1})
+    .skip(skip)
+    .limit(limit);
 
-    res.json(tasks);
-  } catch (error) {
+    //cuento el total 
+    const total = await Task.countDocuments(filter);
+    
+    res.json({
+      data: tasks,
+      pagination: {
+        totalRegistros: total,
+        paginaActual: page,
+        totalPaginas: Math.ceil(total / limit)
+      }
+    });
+  }catch(error){
     console.error(error);
-    res.status(500).json({ message: "Error al obtener las tareas..." });
+    res.status(500).json({message: 'Error al obtener las tareas'});
   }
 };
 

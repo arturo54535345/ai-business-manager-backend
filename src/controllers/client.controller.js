@@ -1,14 +1,36 @@
 const Client = require('../models/Client');
 
 //el logueado obtiene a sus clientes, no los de otros usuarios
-exports.getClients = async (req, res) => {
-    try {
-        // Buscamos solo los clientes cuyo 'owner' sea el usuario logueado
-        const clients = await Client.find({ owner: req.user.id }).sort({ createdAt: -1 });
-        res.json(clients);
-    } catch (error) {
+exports.getClient = async (req, res) => {
+    try{
+        //aqui configuro la paginacion para que no se sature y la web sea lenta
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 10;
+
+        //hago el calculo de cuantos saltare para que no explote
+        const skip = (page - 1) * limit;
+
+        //ahora busco los clientes aplicando el skip y el limit
+        const clients = await Client.find({owner: req.user.id})
+        .sort({createdAt: -1})
+        .skip(skip)
+        .limit(limit);
+
+        //cuento el total de clientes que tiene el usaurio para decirle al front cuantas paginas hay 
+        const total = await Client.countDocuments({owner: req.user.id});
+
+        //envio los datos organizados
+        res.json({
+            data: clients,
+            pagination: {
+                totalRegistros: total,
+                paginaActual: page,
+                totalPaginas: Math.ceil(total / limit)// math redondea hacia arriba
+            }
+        });
+    }catch(error){
         console.error(error);
-        res.status(500).json({ message: 'Error al obtener clientes' });
+        res.status(500).json({message: 'Error al obtener clientes'});
     }
 };
 
