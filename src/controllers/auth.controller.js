@@ -172,7 +172,7 @@ exports.resetPassword = async (req, res) => {
         await user.save();
         //devuelvo un token nuevo para que asi entre directamente, osea un login automatico
         res.json({
-            toke: generateToken(user._id),
+            token: generateToken(user._id),
             message: 'Contraseña actualizada con exito'
         });
     }catch(error){

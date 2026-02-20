@@ -1,7 +1,7 @@
 const Client = require('../models/Client');
 
 //el logueado obtiene a sus clientes, no los de otros usuarios
-exports.getClient = async (req, res) => {
+exports.getClients = async (req, res) => {
     try{
         //aqui configuro la paginacion para que no se sature y la web sea lenta
         const page = parseInt(req.query.page, 10) || 1;
