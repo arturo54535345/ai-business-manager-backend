@@ -9,7 +9,18 @@ const xss = require('xss-clean');
 const app = express();
 
 // ==========================================
-// 1. SEGURIDAD AVANZADA
+// 1. CONFIGURACIÓN GLOBAL (Las puertas y maletas)
+// ==========================================
+// 👉 1. CORS: Abrimos la puerta al Frontend primero
+app.use(cors()); 
+
+// 👉 2. JSON: Abrimos la maleta de datos para poder leerla
+app.use(express.json({ limit: '10kb' })); 
+
+app.use(morgan('dev')); // Muestra las peticiones en la consola
+
+// ==========================================
+// 2. SEGURIDAD AVANZADA (Los detectores de metales)
 // ==========================================
 app.use(helmet()); // Protege las cabeceras HTTP
 
@@ -21,15 +32,20 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter); // Aplicamos el límite solo a las rutas de la API
 
+// 👇 EL CERRAJERO: Desbloqueamos el candado estricto de Express 5 para que el escáner no explote
+app.use((req, res, next) => {
+    Object.defineProperty(req, 'query', {
+        value: { ...req.query },
+        writable: true,
+        configurable: true,
+        enumerable: true
+    });
+    next();
+});
+
+// 👉 3. SANITIZE: Limpiamos de virus ahora que el candado está abierto
 app.use(mongoSanitize()); // Evita inyección de código en MongoDB
 app.use(xss()); // Evita scripts maliciosos en los inputs
-
-// ==========================================
-// 2. CONFIGURACIÓN GLOBAL
-// ==========================================
-app.use(morgan('dev')); // Muestra las peticiones en la consola
-app.use(express.json({ limit: '10kb' })); // Limita el tamaño del JSON que recibes
-app.use(cors()); // Permite que el Frontend se conecte
 
 // ==========================================
 // 3. RUTA DE ESTADO (Health Check)
@@ -64,15 +80,12 @@ app.use('/api/ai', require('./routes/ai.routes'));
 // Dashboard: Estadísticas de la App (Protegido) ✅ ACTIVADO
 app.use('/api/dashboard', require('./routes/dashboard.routes'));
 
-
-// 👇 PRÓXIMAS RUTAS (Aún no creadas, se quedan comentadas) 👇
-// app.use('/api/finance', require('./routes/finance.routes'));
-// app.use('/api/ai', require('./routes/ai.routes'));
-
 // ==========================================
 // 5. MANEJO DE RUTAS NO ENCONTRADAS (404)
 // ==========================================
-app.all('*', (req, res) => {
+// Usamos app.use sin ruta. Si la petición llega hasta aquí abajo 
+// significa que no encontró ninguna ruta válida arriba.
+app.use((req, res) => {
     res.status(404).json({
         status: 'fail',
         message: `No encuentro la ruta ${req.originalUrl} en este servidor`

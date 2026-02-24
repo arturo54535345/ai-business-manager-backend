@@ -37,13 +37,13 @@ const UserSchema = new mongoose.Schema({
 }, {timestamps: true});
 
 //middleware para encriptar las contraseñas antes de guardarla
-UserSchema.pre('save', async function(next){
-    if (!this.isModified('password')) return next();
+//middleware para encriptar las contraseñas antes de guardarla
+UserSchema.pre('save', async function() {
+    if (!this.isModified('password')) return;
 
     //genero un salt y encripto la contraseña
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    next();
 });
 
 //metodo para comparar las contraseña que entra con la que ya esta
