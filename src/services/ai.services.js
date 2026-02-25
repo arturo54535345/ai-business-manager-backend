@@ -6,7 +6,7 @@ const groq = new Groq({
 
 exports.generateBusinessAdvice = async (userContext, question) => {
   try {
-    //contexto para la IA
+    // 1. El guion de comportamiento para la IA
     const systemPrompt = `Eres el "AI Business Manager", un socio estratégico experto en finanzas y productividad.
             
             DATOS DEL USUARIO:
@@ -18,14 +18,19 @@ exports.generateBusinessAdvice = async (userContext, question) => {
             Ayudar al usuario a tomar mejores decisiones, analizar sus finanzas y priorizar tareas.
             Sé directo, profesional y útil. Si faltan datos, pídelos amablemente.
             `;
+            
+    // 2. La petición al servidor de Groq
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: question },
       ],
-      model: "mixtral-8x7b-32768", //modelo de ia
-      temperature: 0.7, //creatividad moderada
+      // 👇 EL PARCHE: Usamos el nuevo motor activo
+      model: "llama-3.3-70b-versatile", 
+      temperature: 0.7, 
     });
+    
+    // 3. Devolvemos solo el texto de la respuesta
     return (
       chatCompletion.choices[0]?.message?.content ||
       "Lo siento, no pude generar una respuesta"
